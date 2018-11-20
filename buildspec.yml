@@ -2,9 +2,9 @@ version: 0.2
 
 env:
   variables:
-    SERVICE_NAME: spring-boot-aws-starter
     REGION: ap-southeast-2
     ACCOUNT: 291104527402
+    SERVICE_NAME: spring-boot-aws-starter
 
 phases:
   pre_build:
