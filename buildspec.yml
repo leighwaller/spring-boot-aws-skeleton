@@ -5,13 +5,13 @@ env:
     SERVICE_NAME: spring-boot-aws-starter
     REGION: ap-southeast-2
     ACCOUNT: 291104527402
-    REPOSITORY_URI: $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$SERVICE_NAME
-    COMMIT_HASH: $(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-    IMAGE_TAG: ${COMMIT_HASH:=latest}
 
 phases:
   pre_build:
     commands:
+    - REPOSITORY_URI=$ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$SERVICE_NAME
+    - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+    - IMAGE_TAG=${COMMIT_HASH:=latest}
     - echo Environment
     - printenv
     - echo Logging in to Amazon ECR...
