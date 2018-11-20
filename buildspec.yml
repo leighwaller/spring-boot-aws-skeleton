@@ -1,0 +1,36 @@
+version: 0.2
+
+env:
+  variables:
+    SERVICE_NAME: spring-boot-aws-starter
+    REGION: ap-southeast-2
+    ACCOUNT: 291104527402
+    REPOSITORY_URI: $ACCOUNT.dkr.ecr.$REGION.amazonaws.com/$SERVICE_NAME
+    COMMIT_HASH: $(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+    IMAGE_TAG: ${COMMIT_HASH:=latest}
+
+phases:
+  pre_build:
+    commands:
+    - echo Environment
+    - printenv
+    - echo Logging in to Amazon ECR...
+    - aws --version
+    - $(aws ecr get-login --region $REGION --no-include-email)
+  build:
+    commands:
+    - echo Build started on `date`
+    - echo Building the Docker image...
+    - docker build -t $REPOSITORY_URI:latest .
+    - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+    - echo Build completed on `date`
+    - echo Pushing the Docker images...
+    - docker push $REPOSITORY_URI:latest
+    - docker push $REPOSITORY_URI:$IMAGE_TAG
+    - echo Writing image definitions file...
+    - printf '[{"name":$SERVICE_NAME,"imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > image_definitions.json
+
+artifacts:
+  files: image_definitions.json
