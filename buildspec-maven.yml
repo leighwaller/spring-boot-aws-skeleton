@@ -1,0 +1,20 @@
+version: 0.2
+
+env:
+  variables:
+    SERVICE_NAME: spring-boot-aws-starter
+
+phases:
+  build:
+    commands:
+    - echo Build started on `date`
+    - echo Running tests
+    - mvn clean verify
+    # todo potentially generate reports here
+  post_build:
+    commands:
+    - echo Build completed on `date`
+
+artifacts:
+  files: target/$SERVICE_NAME-*.jar
+
