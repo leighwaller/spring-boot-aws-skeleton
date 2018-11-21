@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:8-jdk-alpine
 
 ARG JARFILE=target/spring-boot-aws-starter*.jar
 
