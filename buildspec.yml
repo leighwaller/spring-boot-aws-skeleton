@@ -20,10 +20,9 @@ phases:
   build:
     commands:
     - echo Build started on `date`
-    - mvn clean verify
+    - mvn clean verify -B
   post_build:
     commands:
-    - echo $CODEBUILD_BUILD_SUCCEEDING
     - |
       if [ $CODEBUILD_BUILD_SUCCEEDING -eq 1 ]
       then
